@@ -1,22 +1,23 @@
 /* Unsupervised Rock: the studio's site (studio/README.md). Calm, like Strata. */
 :root { --ink: #4a3d63; --ink-soft: rgba(74, 61, 99, .66); --line: rgba(74, 61, 99, .14);
   --font: "Avenir Next", "Avenir", Futura, "Century Gothic", "Segoe UI", system-ui, sans-serif; }
-/* A Paleolithic jungle round a formal sheet (Sendak's Wild Things forest, cave
-   pigments, coal-age plants; tools/paleo.py draws it): flat shapes, a solid colour per
-   depth, sprayed edges on the near plants. Far: a colonnade of thin trunks and tree-fern
-   crowns down both sides, drifting with the scroll (parallax.js). Top: lianas hanging from
-   the edge. Foot: a border of sword ferns, horsetails and cycads on stepped ochre earth,
-   behind the sheet's lower edge, with two clumps in front of its corners. */
+/* A Paleolithic jungle as a frame round a formal sheet: a few huge, simple shapes
+   (Matisse's cut-outs, Primal's silhouettes) growing in from the screen's four corners,
+   like a proscenium; tools/frame.py draws them. Two depths: the back behind the sheet,
+   the front over its edges, each drifting a little as the page scrolls (parallax.js
+   sets --p, 0 at the top to 1 at the bottom). Flat colour, sprayed edges. */
 html { background: #ebeedb; }
 body { margin: 0; min-height: 100vh; position: relative; overflow: hidden; overflow: clip; color: var(--ink); font: 17px/1.6 var(--font);
-  padding: 130px 20px 250px; box-sizing: border-box; }
-.jungle { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-.layer { position: absolute; top: 0; bottom: 0; background-repeat: repeat-y; background-size: 100% auto; }
-.far { width: min(460px, 34vw); } .far.l { left: -40px; background-image: url(far-l.svg); } .far.r { right: -40px; background-image: url(far-r.svg); }
-.canopy { position: absolute; left: 0; right: 0; top: 0; height: 560px; z-index: 0; pointer-events: none; background: url(canopy.svg) center top / auto 560px repeat-x; }
-.border { position: absolute; left: 0; right: 0; bottom: 0; height: 440px; z-index: 0; pointer-events: none; background: url(border.svg) center bottom / auto 440px repeat-x; }
-.front { position: absolute; z-index: 2; bottom: -150px; width: 300px; pointer-events: none; user-select: none; }
-.front.l { left: -190px; } .front.r { right: -190px; }
+  padding: 96px 20px 140px; box-sizing: border-box; }
+.frame { position: fixed; inset: 0; pointer-events: none; }
+.frame.back { z-index: 0; transform: translateY(calc(var(--p, 0) * -28px)); }
+.frame.front { z-index: 2; transform: translateY(calc(var(--p, 0) * -64px)); }
+.c { position: absolute; height: auto; user-select: none; }
+.back .c { width: clamp(280px, 46vmax, 860px); }
+.front .c { width: clamp(220px, 34vmax, 640px); }
+.c.tl { top: 0; left: 0; } .c.tr { top: 0; right: 0; transform: scaleX(-1); }
+.c.bl { bottom: 0; left: 0; } .c.br { bottom: 0; right: 0; transform: scaleX(-1); }
+.front .c.tl, .front .c.tr { top: -2vmax; } .front .c.bl, .front .c.br { bottom: -6vmax; }
 /* paint on a wall: a faint grain over everything */
 body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: url(grain.svg); opacity: .1; mix-blend-mode: multiply; }
 
@@ -26,13 +27,12 @@ body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-eve
 main { max-width: none; margin: 0; padding: 52px 48px 24px; }
 footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
 @media (max-width: 560px) {
-  body { padding: 120px 14px 210px; }
+  body { padding: 150px 34px 170px; }
   main { padding: 34px 22px 18px; }
   footer { margin: 0 22px; }
-  .far { width: 44vw; } .far.l { left: -18vw; } .far.r { right: -18vw; }
-  .canopy { height: 380px; background-size: auto 380px; }
-  .border { height: 330px; background-size: auto 330px; }
-  .front { width: 170px; bottom: -96px; } .front.l { left: -70px; } .front.r { right: -70px; }
+  .back .c { width: 80vw; }
+  .front .c { width: 52vw; }
+  .frame.front { z-index: 0; }   /* on a phone the front fronds stay behind the sheet, off the words */
 }
 a { color: var(--ink); }
 .studio { margin: 0; font-weight: 400; font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-soft); }
@@ -52,7 +52,7 @@ footer { border-top: 1px solid var(--line); text-align: center; font-size: 13px;
 .game h2 { margin: 0; font-size: 20px; letter-spacing: .02em; text-transform: none; color: var(--ink); font-weight: 500; }
 .game p { margin: 4px 0 0; font-size: 15px; }
 .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
-.pill { display: inline-block; padding: 9px 18px; border-radius: 999px; background: var(--ink); color: #fffaf3; text-decoration: none; font-size: 15px; }
+.pill { display: inline-block; white-space: nowrap; padding: 9px 18px; border-radius: 999px; background: var(--ink); color: #fffaf3; text-decoration: none; font-size: 15px; }
 .pill.soft { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 
 footer a { color: var(--ink-soft); text-decoration: none; margin: 0 .5em; text-transform: uppercase; }

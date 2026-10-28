@@ -10,6 +10,7 @@ function update() {
   const y = scrollY, room = Math.max(1, root.scrollHeight - innerHeight);
   const grow = Math.min(1, y / room);
   root.style.setProperty('--grow', still.matches ? 0.5 : grow.toFixed(3));
+  root.style.setProperty('--p', still.matches ? 0 : grow.toFixed(3));   // the frame's drift
   if (still.matches) return;
   for (const el of layers) el.style.backgroundPositionY = `${(-y * el.dataset.speed).toFixed(1)}px`;
 }
