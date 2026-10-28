@@ -10,7 +10,8 @@ html { background: #ebeedb; overflow-x: hidden; overscroll-behavior-x: none; }  
 body { touch-action: pan-y pinch-zoom; }
 body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font: 17px/1.6 var(--font);
   padding: clamp(190px, 22vmax, 320px) 20px 220px; box-sizing: border-box; }
-.frame { position: fixed; inset: 0; pointer-events: none; }
+/* svh: the screen above Safari's bottom bar; a fixed layer that reaches under the bar is cut off there (iOS 26) */
+.frame { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100svh; pointer-events: none; }
 .frame.back { z-index: 2; }   /* a fixed border: still, in front; the words scroll behind it */
 .frame.front { z-index: 3; }
 .c { position: absolute; height: auto; user-select: none; }
