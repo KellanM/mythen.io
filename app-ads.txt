@@ -1,0 +1,5 @@
+# app-ads.txt for mythen.io: the ad networks allowed to sell ads in Strata: Stone Puzzles.
+# Strata shows no ads yet. When AppLovin MAX is set up, paste the exact lines from
+# AppLovin's dashboard (Account > General > App-ads.txt Info), and AdMob's (Apps > app-ads.txt)
+# if it is a mediated network, below this comment. One line per network, e.g.
+#   applovin.com, <your AppLovin account id>, DIRECT, 307dc6b1...
