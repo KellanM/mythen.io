@@ -10,18 +10,22 @@ html { background: #ebeedb; overflow-x: hidden; overscroll-behavior-x: none; }  
 body { touch-action: pan-y pinch-zoom; }
 body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font: 17px/1.6 var(--font);
   padding: clamp(190px, 22vmax, 320px) 20px 220px; box-sizing: border-box; }
-/* svh: the screen above Safari's bottom bar; a fixed layer that reaches under the bar is cut off there (iOS 26) */
-.frame { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100svh; pointer-events: none; }
+.frame { position: fixed; inset: 0; pointer-events: none; }
 .frame.back { z-index: 2; }   /* a fixed border: still, in front; the words scroll behind it */
 .frame.front { z-index: 3; }
 .c { position: absolute; height: auto; user-select: none; }
 .back .c { width: clamp(280px, 40vw, 900px); }  .back .c.bl { width: clamp(240px, 31vw, 680px); }
 .front .c { width: clamp(220px, 30vw, 680px); } .front .c.bl { width: clamp(170px, 21vw, 480px); }
-.c.tl { top: 0; left: 0; } .c.tr { top: 0; right: 0; transform: scaleX(-1); }
-.c.bl { bottom: 0; left: 0; } .c.br { bottom: 0; right: 0; transform: scaleX(-1); }
+/* each corner's art runs on past the screen's edge (tools/frame.py: E/(S+E) = 600/1400 of it), out of
+   sight on a computer; iOS 26 Safari draws the page under its status bar and floating tab bar, and
+   there the plants carry on instead of stopping in a straight line with the words showing under them */
+.c.tl { top: 0; left: 0; transform: translateY(-42.857%); } .c.tr { top: 0; right: 0; transform: translateY(-42.857%) scaleX(-1); }
+.c.bl { bottom: 0; left: 0; transform: translateY(42.857%); } .c.br { bottom: 0; right: 0; transform: translateY(42.857%) scaleX(-1); }
 .front .c.tl, .front .c.tr { top: -2vmax; } .front .c.bl, .front .c.br { bottom: 0; }
 /* the top: a fringe of leaves and the vine swinging out to the right, part of the fixed border */
-.canopy-back, .canopy-front { position: fixed; top: 0; left: 0; width: 100%; height: clamp(150px, 19vmax, 270px); object-fit: cover; object-position: center top; pointer-events: none; user-select: none; }
+/* the art runs 200 (of 420) units on above the screen, under the status bar: --e is those 200 units at the scale cover draws it */
+.canopy-back, .canopy-front { --h: clamp(150px, 19vmax, 270px); --e: max(calc(100vw * 200 / 1600), calc(var(--h) * 200 / 420));
+  position: fixed; top: calc(-1 * var(--e)); left: 0; width: 100%; height: calc(var(--h) + var(--e)); object-fit: cover; object-position: center top; pointer-events: none; user-select: none; }
 .canopy-back { z-index: 2; } .canopy-front { z-index: 3; }
 /* paint on a wall: a faint grain over everything */
 body::after { content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none; background: url(grain.svg); opacity: .1; mix-blend-mode: multiply; }
