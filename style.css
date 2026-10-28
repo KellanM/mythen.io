@@ -79,6 +79,3 @@ main ul li::before { content: ""; position: absolute; left: .1em; top: .42em; wi
 main ul li:nth-child(2n)::before { transform: rotate(18deg) scale(.92); }
 main ul li:nth-child(3n)::before { transform: rotate(-30deg) scale(1.05); }
 
-/* the signature: a red-ochre hand, sprayed round as on a cave wall */
-.sign { display: flex; align-items: center; justify-content: center; gap: 10px; }
-.sign img { width: 36px; height: auto; opacity: .9; }
