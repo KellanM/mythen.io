@@ -6,6 +6,7 @@ import math, random, os, sys
 sys.path.insert(0, os.path.dirname(__file__))
 from bold import blade, trunk, spray, pt, smooth, OCHRE
 from bold import frond as _frond
+from stipple import spray as droplets, dots_only, kusama, kusama2, kusama3, kusama4, kusama6
 
 def frond(base, ang, L, W, teeth=8, curl=0.0):
     return _frond(base, ang, L, W, teeth=teeth, curl=curl)
@@ -15,13 +16,36 @@ def leaf(c, ang, s):
     pts = [pt(c, ang, s * u, s * v) for u, v in ((0, 0), (0.25, 0.42), (0.6, 0.5), (1.0, 0.36), (1.45, 0.12), (1.7, 0), (1.45, -0.12), (1.0, -0.36), (0.6, -0.5), (0.25, -0.42))]
     return smooth(pts)
 heart = leaf
-OUT = os.path.join(os.path.dirname(__file__), '..')
+OUT = os.environ.get('OUT') or os.path.join(os.path.dirname(__file__), '..')
+# the edges: 'stipple' (clean shapes and an overspray of real round droplets, tools/stipple.py) or 'spray'
+# (the old SVG filter: a displaced edge and a noise speckle, which read as JPEG noise). STIPPLE tunes the droplets.
+STYLE = os.environ.get('STYLE', 'kusama')   # Kellan's pick, 2026-10-28: every leaf filled with dots, after Kusama's pumpkin
+DROPS = dict(reach=18, density=0.5)
+KUSAMA = dict(k=0.8, gap=6, rmin=4)   # the medium, even gap (Kellan's pick) - 'kusama': rows of graded dots following each shape's outline (tools/stipple.py); KUSAMA env as k=v,k=v
+if os.environ.get('KUSAMA'): KUSAMA.update({k: float(v) for k, v in (kv.split('=') for kv in os.environ['KUSAMA'].split(','))})
+DOTS = {}   # 'dots': the whole shape as droplets (tools/stipple.py dots_only); DOTS env as k=v,k=v
+if os.environ.get('DOTS'): DOTS.update({k: float(v) for k, v in (kv.split('=') for kv in os.environ['DOTS'].split(','))})
+if os.environ.get('STIPPLE'): DROPS.update({k: float(v) for k, v in (kv.split('=') for kv in os.environ['STIPPLE'].split(','))})
 BACK, FRONT = '#7f9a4a', '#2f4426'
 S = 800   # each corner is drawn in an 800 x 800 box, anchored at its corner
 E = 600   # and runs on E past the screen's edge: Safari (iOS 26) draws the page under its bars, so the plants carry on under them
 
 def save(name, colour, shapes, fid, halo, rough, under='', edge='top'):
     vb = f"0 {-E} {S} {S + E}" if edge == 'top' else f"0 0 {S} {S + E}"
+    if STYLE in ('dots', 'kusama'):
+        y0 = -E if edge == 'top' else 0
+        box = (-200, y0 - 200, S + 400, S + E + 400); sd = len(name) * 7 + ord(name[7])
+        dots = (({'2': kusama2, '3': kusama3, '4': kusama4, '6': kusama6}.get(os.environ.get('K2', '6'), kusama))(shapes, box, seed=sd, **KUSAMA) if STYLE == 'kusama' else dots_only(shapes, box, seed=sd, **DOTS))[0]
+        open(f"{OUT}/{name}.svg", "w").write(
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}" width="{S}" height="{S + E}" aria-hidden="true">{under}<path d="{dots}" fill="{colour}"/></svg>')
+        return
+    if STYLE == 'stipple':
+        y0 = -E if edge == 'top' else 0
+        dots, _ = droplets(shapes, (-200, y0 - 200, S + 400, S + E + 400), seed=len(name) * 7 + ord(name[7]), tilt=(0.5, -0.5), **DROPS)
+        body = f'<path d="{" ".join(shapes)}" fill="{colour}"/><path d="{dots}" fill="{colour}"/>'
+        open(f"{OUT}/{name}.svg", "w").write(
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}" width="{S}" height="{S + E}" aria-hidden="true">{under}{body}</svg>')
+        return
     body = f'<g filter="url(#{fid})"><path d="{" ".join(shapes)}" fill="{colour}"/></g>'
     open(f"{OUT}/{name}.svg", "w").write(
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}" width="{S}" height="{S + E}" aria-hidden="true">'
@@ -82,6 +106,20 @@ def swag(p0, p1, p2, width, n_leaves, size, seed):
     return sh
 
 def layer_svg(name, groups, halo, rough):
+    if STYLE in ('dots', 'kusama'):
+        box = (-200, -TE - 200, TW + 400, TH + TE + 400)
+        body = ''.join(f'<path d="{(({'2': kusama2, '3': kusama3, '4': kusama4, '6': kusama6}.get(os.environ.get('K2', '6'), kusama))(sh, box, seed=31 + i, **KUSAMA) if STYLE == "kusama" else dots_only(sh, box, seed=31 + i + len(name), **DOTS))[0]}" fill="{c}"/>' for i, (c, sh) in enumerate(groups))
+        open(f"{OUT}/{name}.svg", "w").write(
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 {-TE} {TW} {TH + TE}" width="{TW}" height="{TH + TE}" preserveAspectRatio="xMidYMin slice" aria-hidden="true">{body}</svg>')
+        return
+    if STYLE == 'stipple':
+        body = ''
+        for i, (c, sh) in enumerate(groups):
+            dots, _ = droplets(sh, (-200, -TE - 200, TW + 400, TH + TE + 400), seed=31 + i + len(name), tilt=(0.5, 0.5), **DROPS)
+            body += f'<path d="{" ".join(sh)}" fill="{c}"/><path d="{dots}" fill="{c}"/>'
+        open(f"{OUT}/{name}.svg", "w").write(
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 {-TE} {TW} {TH + TE}" width="{TW}" height="{TH + TE}" preserveAspectRatio="xMidYMin slice" aria-hidden="true">{body}</svg>')
+        return
     defs = ''.join(spray(f'g{i}', c, halo, rough) for i, (c, _) in enumerate(groups))
     body = ''.join(f'<g filter="url(#g{i})"><path d="{" ".join(sh)}" fill="{c}"/></g>' for i, (c, sh) in enumerate(groups))
     open(f"{OUT}/{name}.svg", "w").write(
