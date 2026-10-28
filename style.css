@@ -1,10 +1,43 @@
 /* Unsupervised Rock: the studio's site (studio/README.md). Calm, like Strata. */
 :root { --ink: #4a3d63; --ink-soft: rgba(74, 61, 99, .66); --line: rgba(74, 61, 99, .14);
   --font: "Avenir Next", "Avenir", Futura, "Century Gothic", "Segoe UI", system-ui, sans-serif; }
-html { background: #f7efe6; }
-body { margin: 0; min-height: 100vh; color: var(--ink); font: 17px/1.6 var(--font);
-  background: linear-gradient(180deg, #eaf5d6 0, #f3f2e2 280px, #f7efe6 680px) no-repeat; }
-main { max-width: 620px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 44px) 22px 40px; }
+/* A game-studio scene: a formal sheet in the middle of a flat, layered jungle. Solid
+   colour per layer, no gradients; each nearer layer darker. The layers repeat down the
+   page and drift at their own speeds (parallax.js); a thicker layer grows in as you
+   scroll, and the page ends on red-brown earth and ferns. The near layer just touches
+   the sheet's edges: the wild growing into the formal. */
+html { background: #e7f1d2; }
+body { margin: 0; min-height: 100vh; position: relative; overflow: hidden; overflow: clip; color: var(--ink); font: 17px/1.6 var(--font);
+  padding: 80px 20px 290px; box-sizing: border-box; }
+.jungle { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.jungle.front { z-index: 2; }
+.layer { position: absolute; top: 0; bottom: 0; background-repeat: repeat-y; background-size: 100% auto; }
+.far { width: min(520px, 40vw); } .far.l { left: -60px; background-image: url(j-far-l.svg); } .far.r { right: -60px; background-image: url(j-far-r.svg); }
+.mid { width: min(440px, 32vw); } .mid.l { left: -50px; background-image: url(j-mid-l.svg); } .mid.r { right: -50px; background-image: url(j-mid-r.svg); }
+.thick { width: min(380px, 28vw); opacity: var(--grow, 0); } .thick.l { left: -30px; background-image: url(j-thick-l.svg); } .thick.r { right: -30px; background-image: url(j-thick-r.svg); }
+/* near: just over the sheet's edge, never over its words (the sheet has 48px of margin) */
+.near { width: 300px; } .near.l { left: calc(50% - 350px - 300px + 40px); background-image: url(j-near-l.svg); } .near.r { right: calc(50% - 350px - 300px + 40px); background-image: url(j-near-r.svg); }
+.ground { position: absolute; left: 0; right: 0; bottom: 0; height: 280px; z-index: 1;
+  background: url(ground.svg) center bottom 54px / auto 230px repeat-x, linear-gradient(#c98f6b, #c98f6b) center bottom / 100% 60px no-repeat; }
+.ground::before { content: ""; position: absolute; left: 0; right: 0; bottom: 56px; height: 120px; z-index: -1;
+  background: url(j-thick-l.svg) left bottom / auto 600px repeat-x; opacity: .9; }
+/* paint on a wall: a faint grain over everything */
+body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: url(grain.svg); opacity: .12; mix-blend-mode: multiply; }
+
+/* the formal sheet */
+.sheet-wrap { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.sheet { position: relative; background: #fcf9f2; border: 1px solid rgba(74, 61, 99, .18); border-radius: 4px; }
+main { max-width: none; margin: 0; padding: 52px 48px 24px; }
+footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
+@media (max-width: 560px) {
+  body { padding: 110px 14px 250px; }
+  main { padding: 34px 22px 18px; }
+  footer { margin: 0 22px; }
+  .far { width: 62vw; } .mid { width: 46vw; } .thick { width: 40vw; }
+  .jungle.front { z-index: 0; }   /* on a phone the near layer stays behind the sheet */
+  .near { width: 30vw; } .near.l { left: -8vw; } .near.r { right: -8vw; }
+  .ground { height: 230px; background-size: auto 190px, 100% 50px; background-position: center bottom 44px, center bottom; }
+}
 a { color: var(--ink); }
 .studio { margin: 0; font-weight: 400; font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-soft); }
 .studio a { color: inherit; text-decoration: none; }
@@ -12,29 +45,35 @@ h1 { margin: 10px 0 0; font-weight: 400; font-size: 26px; letter-spacing: .02em;
 h2 { margin: 2em 0 .4em; font-size: 13px; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft); }
 h3 { margin: 1.4em 0 .3em; font-size: 17px; font-weight: 600; }
 p, li { margin: 0 0 .8em; }
-ul { padding-left: 1.2em; }
 .meta { font-size: 14px; color: var(--ink-soft); }
-.note { padding: 12px 16px; border-radius: 14px; background: rgba(255, 252, 246, .82); font-size: 15px; }
+.note { padding: 12px 16px; border-radius: 14px; background: rgba(240, 246, 226, .9); font-size: 15px; }
+footer { border-top: 1px solid var(--line); text-align: center; font-size: 13px; letter-spacing: .14em; color: var(--ink-soft); }
 
 /* the game, on the home page */
 .game { display: flex; gap: 18px; align-items: center; margin: 34px 0 10px; padding: 18px; border-radius: 22px;
-  background: rgba(255, 252, 246, .82); box-shadow: 0 10px 30px rgba(74, 61, 99, .08); }
-.game img { width: 88px; height: 88px; border-radius: 20px; flex: none; box-shadow: 0 6px 18px rgba(74, 61, 99, .16); }
+  background: rgba(255, 252, 246, .86); border: 1px solid var(--line); }
+.game img { width: 88px; height: 88px; border-radius: 20px; flex: none; }
 .game h2 { margin: 0; font-size: 20px; letter-spacing: .02em; text-transform: none; color: var(--ink); font-weight: 500; }
 .game p { margin: 4px 0 0; font-size: 15px; }
 .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .pill { display: inline-block; padding: 9px 18px; border-radius: 999px; background: var(--ink); color: #fffaf3; text-decoration: none; font-size: 15px; }
 .pill.soft { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 
-footer { max-width: 620px; margin: 0 auto; padding: 22px 22px calc(env(safe-area-inset-bottom) + 34px); border-top: 1px solid var(--line);
-  text-align: center; font-size: 13px; letter-spacing: .14em; color: var(--ink-soft); }
 footer a { color: var(--ink-soft); text-decoration: none; margin: 0 .5em; text-transform: uppercase; }
 footer p { margin: .6em 0 0; letter-spacing: .06em; }
 
 /* the feature section */
-.facts { padding-left: 1.1em; }
+
 .shots { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 18px -22px 8px; padding: 4px 22px 12px; }
 .shots figure { margin: 0; flex: 0 0 62%; max-width: 220px; scroll-snap-align: center; text-align: center; }
-.shots img { width: 100%; height: auto; border-radius: 18px; box-shadow: 0 8px 24px rgba(74, 61, 99, .14); }
+.shots img { width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); }
 .shots figcaption { margin-top: 8px; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
 @media (min-width: 640px) { .shots figure { flex: 1 1 0; } }
+
+/* hand-drawn bullets: a small leaf, each one turned a little differently */
+main ul { list-style: none; padding-left: 0; }
+main ul li { position: relative; padding-left: 1.7em; }
+main ul li::before { content: ""; position: absolute; left: .1em; top: .42em; width: .9em; height: .9em;
+  background: url(bullet.svg) center / contain no-repeat; transform: rotate(-12deg); }
+main ul li:nth-child(2n)::before { transform: rotate(18deg) scale(.92); }
+main ul li:nth-child(3n)::before { transform: rotate(-30deg) scale(1.05); }
