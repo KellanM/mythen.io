@@ -13,8 +13,8 @@ body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font
 .frame.back { z-index: 0; transform: translateY(calc(var(--p, 0) * -28px)); }
 .frame.front { z-index: 2; transform: translateY(calc(var(--p, 0) * -64px)); }
 .c { position: absolute; height: auto; user-select: none; }
-.back .c { width: clamp(280px, 46vmax, 860px); }
-.front .c { width: clamp(220px, 34vmax, 640px); }
+.back .c { width: clamp(280px, 40vw, 900px); }  .back .c.tr, .back .c.bl { width: clamp(200px, 25vw, 560px); }
+.front .c { width: clamp(220px, 30vw, 680px); } .front .c.tr, .front .c.bl { width: clamp(150px, 17vw, 400px); }
 .c.tl { top: 0; left: 0; } .c.tr { top: 0; right: 0; transform: scaleX(-1); }
 .c.bl { bottom: 0; left: 0; } .c.br { bottom: 0; right: 0; transform: scaleX(-1); }
 .front .c.tl, .front .c.tr { top: -2vmax; } .front .c.bl, .front .c.br { bottom: -6vmax; }
@@ -30,16 +30,17 @@ body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-eve
 .sheet { position: relative; }   /* no card: the words sit on the page itself */
 /* a clearing in the foliage behind the words: the page's own sky, feathered at the edges
    (no border, no card), so the leaves recede behind the text and come back round it */
-.sheet::before { content: ""; position: absolute; inset: -30px -70px; z-index: -1; background: #ebeedb;
-  border-radius: 80px; filter: blur(28px); }
+.sheet::before { content: ""; position: absolute; z-index: -1; background: #ebeedb; border-radius: 48px; filter: blur(14px);
+  /* never wider than the room beside the text, so it can't push the page past the screen's edge */
+  inset: -24px calc(-1 * min(40px, max(14px, (100vw - 700px) / 2 - 6px))); }
 main { max-width: none; margin: 0; padding: 52px 48px 24px; }
 footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
 @media (max-width: 560px) {
   body { padding: 230px 26px 170px; }
   main { padding: 34px 22px 18px; }
   footer { margin: 0 22px; }
-  .back .c { width: 80vw; }
-  .front .c { width: 52vw; }
+  .back .c { width: 78vw; }  .back .c.tr, .back .c.bl { width: 50vw; }
+  .front .c { width: 54vw; } .front .c.tr, .front .c.bl { width: 34vw; }
   .frame.front { z-index: 0; }   /* on a phone the front fronds stay behind the sheet, off the words */
 }
 a { color: var(--ink); }

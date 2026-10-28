@@ -51,10 +51,17 @@ def bottom(seed, n, L, Wd, leaves):
 
 mound = ''.join(f'<path d="M-10,{S+10} Q{120+i*40},{S-150+i*45} {420-i*50},{S+10}Z" fill="{c}"/>' for i, c in enumerate(OCHRE))
 
-save('corner-top-back', BACK, top(3, 5, 640, 92, [(430, 470)]), 'b', 2, 6)
-save('corner-top-front', FRONT, top(7, 3, 470, 78, [(250, 330)]), 'f', 7, 7)
-save('corner-bottom-back', BACK, bottom(5, 5, 620, 92, [(470, 120, -1.2)]), 'b', 2, 6)
-save('corner-bottom-front', FRONT, bottom(9, 3, 460, 80, [(300, 100, -1.0)]), 'f', 7, 7, under=mound)
+# four different corners, weighted on the diagonal (Kellan, 2026-10-28: asymmetry, the
+# rule of thirds): heavy top-left and bottom-right, light top-right and bottom-left. The
+# right-hand corners are drawn as left ones and mirrored by the page, but each is its own.
+save('corner-tl-back', BACK, top(3, 6, 680, 96, [(430, 500)]), 'b', 2, 6)
+save('corner-tl-front', FRONT, top(7, 3, 500, 82, [(250, 340)]), 'f', 7, 7)
+save('corner-tr-back', BACK, top(13, 3, 520, 84, []), 'b', 2, 6)
+save('corner-tr-front', FRONT, top(17, 2, 380, 70, [(160, 230)]), 'f', 7, 7)
+save('corner-bl-back', BACK, bottom(15, 3, 500, 84, [(330, 90, -1.1)]), 'b', 2, 6)
+save('corner-bl-front', FRONT, bottom(19, 2, 360, 70, []), 'f', 7, 7, under=mound)
+save('corner-br-back', BACK, bottom(5, 6, 660, 96, [(470, 120, -1.2), (560, 96, -0.7)]), 'b', 2, 6)
+save('corner-br-front', FRONT, bottom(9, 3, 480, 82, [(300, 104, -1.0)]), 'f', 7, 7, under=mound)
 print('ok')
 
 # ---------------------------------------------------------------- the top: a fringe of big leaves, and two vines
