@@ -11,10 +11,12 @@ body { touch-action: pan-y pinch-zoom; }
 body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font: 17px/1.6 var(--font);
   padding: clamp(190px, 22vmax, 320px) 20px 220px; box-sizing: border-box; }
 .frame { position: fixed; inset: 0; pointer-events: none; }
+.frame.far { z-index: 0; }   /* the haze: behind the words, nearly the page's colour */
 .frame.back { z-index: 2; }   /* a fixed border: still, in front; the words scroll behind it */
 .frame.front { z-index: 3; }
 .c { position: absolute; height: auto; user-select: none; }
 .back .c { width: clamp(280px, 40vw, 900px); }  .back .c.bl { width: clamp(240px, 31vw, 680px); }
+.far .c { width: clamp(300px, 42vw, 960px); }  .far .c.bl { width: clamp(260px, 34vw, 760px); }
 .front .c { width: clamp(220px, 30vw, 680px); } .front .c.bl { width: clamp(170px, 21vw, 480px); }
 /* each corner's art runs on past the screen's edge (tools/frame.py: E/(S+E) = 600/1400 of it), out of
    sight on a computer; iOS 26 Safari draws the page under its status bar and floating tab bar, and
@@ -24,9 +26,9 @@ body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font
 .front .c.tl, .front .c.tr { top: -2vmax; } .front .c.bl, .front .c.br { bottom: 0; }
 /* the top: a fringe of leaves and the vine swinging out to the right, part of the fixed border */
 /* the art runs 200 (of 420) units on above the screen, under the status bar: --e is those 200 units at the scale cover draws it */
-.canopy-back, .canopy-front { --h: clamp(150px, 19vmax, 270px); --e: max(calc(100vw * 200 / 1600), calc(var(--h) * 200 / 420));
+.canopy-front { --h: clamp(150px, 19vmax, 270px); --e: max(calc(100vw * 200 / 1600), calc(var(--h) * 200 / 420));
   position: fixed; top: calc(-1 * var(--e)); left: 0; width: 100%; height: calc(var(--h) + var(--e)); object-fit: cover; object-position: center top; pointer-events: none; user-select: none; }
-.canopy-back { z-index: 2; } .canopy-front { z-index: 3; }
+.canopy-front { z-index: 3; }   /* the vine alone: a fringe here overlapped the corners in the same colour, and the dots of two images can't keep apart (Kellan, 2026-10-28) */
 /* paint on a wall: a faint grain over everything */
 body::after { content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none; background: url(grain.svg); opacity: .1; mix-blend-mode: multiply; }
 
@@ -39,9 +41,10 @@ footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
   body { padding: 190px 26px 240px; }
   main { padding: 34px 22px 18px; }
   footer { margin: 0 22px; }
+  .far .c { width: 80vw; }  .far .c.bl { width: 66vw; }
   .back .c { width: 64vw; }  .back .c.bl { width: 50vw; }
   .front .c { width: 48vw; } .front .c.bl { width: 36vw; }
-  .frame.front { z-index: 0; }   /* on a phone the front fronds stay behind the sheet, off the words */
+  .frame.back, .frame.front { z-index: 0; }   /* on a phone both stay behind the sheet, off the words: the dark front still over the light back (page order) */
 }
 a { color: var(--ink); overflow-wrap: anywhere; }   /* a long link breaks rather than widening the page */
 .studio { margin: 0; font-weight: 400; font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-soft); }
