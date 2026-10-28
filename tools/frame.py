@@ -56,3 +56,32 @@ save('corner-top-front', FRONT, top(7, 3, 470, 78, [(250, 330)]), 'f', 7, 7)
 save('corner-bottom-back', BACK, bottom(5, 5, 620, 92, [(470, 120, -1.2)]), 'b', 2, 6)
 save('corner-bottom-front', FRONT, bottom(9, 3, 460, 80, [(300, 100, -1.0)]), 'f', 7, 7, under=mound)
 print('ok')
+
+# ---------------------------------------------------------------- the top: a fringe of big leaves, and two vines
+# swinging from the top out to the right edge, each its own colour (Kellan, 2026-10-28)
+TW, TH = 1600, 420
+def swag(p0, p1, p2, width, n_leaves, size, seed):
+    """a vine as a thick ribbon along a quadratic swing, big leaves hanging off it"""
+    random.seed(seed); sh = []
+    pts = [((1-t)**2*p0[0] + 2*(1-t)*t*p1[0] + t*t*p2[0], (1-t)**2*p0[1] + 2*(1-t)*t*p1[1] + t*t*p2[1]) for t in (i/40 for i in range(41))]
+    sh.append("M" + " L".join(f"{x:.1f},{y - width/2:.1f}" for x, y in pts) + " L" + " L".join(f"{x:.1f},{y + width/2:.1f}" for x, y in pts[::-1]) + "Z")
+    for k in range(n_leaves):
+        x, y = pts[int((k + 0.5) / n_leaves * 40)]
+        a = math.pi / 2 + random.uniform(-0.9, 0.9)               # hanging, each at its own angle
+        sh.append(heart((x, y), a, size * random.uniform(0.8, 1.15)))
+    return sh
+
+def layer_svg(name, groups, halo, rough):
+    defs = ''.join(spray(f'g{i}', c, halo, rough) for i, (c, _) in enumerate(groups))
+    body = ''.join(f'<g filter="url(#g{i})"><path d="{" ".join(sh)}" fill="{c}"/></g>' for i, (c, sh) in enumerate(groups))
+    open(f"{OUT}/{name}.svg", "w").write(
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {TW} {TH}" width="{TW}" height="{TH}" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><defs>{defs}</defs>{body}</svg>')
+
+random.seed(41); fringe = []
+for x in range(150, TW - 100, 120):                              # big leaves hanging along the top edge
+    for k in range(random.randint(1, 3)):
+        fringe.append(heart((x + random.uniform(-40, 40), random.uniform(-30, 10)), math.pi/2 + random.uniform(-0.7, 0.7), random.uniform(70, 110)))
+VINE_A, VINE_B = '#9a5530', '#9db45a'                             # red-ochre brown; a light, sunlit olive
+layer_svg('top-back', [(BACK, fringe)], 2, 6)   # the red-ochre vine is gone (Kellan, 2026-10-28)
+layer_svg('top-front', [(VINE_B, swag((520, -20), (1050, 380), (TW + 40, 40), 12, 8, 70, 47))], 6, 6)
+print('top ok')

@@ -7,8 +7,8 @@
    the front over its edges, each drifting a little as the page scrolls (parallax.js
    sets --p, 0 at the top to 1 at the bottom). Flat colour, sprayed edges. */
 html { background: #ebeedb; }
-body { margin: 0; min-height: 100vh; position: relative; overflow: hidden; overflow: clip; color: var(--ink); font: 17px/1.6 var(--font);
-  padding: 96px 20px 140px; box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font: 17px/1.6 var(--font);
+  padding: clamp(250px, 30vmax, 400px) 20px 160px; box-sizing: border-box; }
 .frame { position: fixed; inset: 0; pointer-events: none; }
 .frame.back { z-index: 0; transform: translateY(calc(var(--p, 0) * -28px)); }
 .frame.front { z-index: 2; transform: translateY(calc(var(--p, 0) * -64px)); }
@@ -18,16 +18,24 @@ body { margin: 0; min-height: 100vh; position: relative; overflow: hidden; overf
 .c.tl { top: 0; left: 0; } .c.tr { top: 0; right: 0; transform: scaleX(-1); }
 .c.bl { bottom: 0; left: 0; } .c.br { bottom: 0; right: 0; transform: scaleX(-1); }
 .front .c.tl, .front .c.tr { top: -2vmax; } .front .c.bl, .front .c.br { bottom: -6vmax; }
+/* the top: a fringe of leaves and two vines swinging out to the right; it scrolls away
+   with the page, and the words start below it, so the vines never cross them */
+.canopy-back, .canopy-front { position: absolute; top: 0; left: 0; width: 100%; height: clamp(240px, 30vmax, 420px); object-fit: cover; object-position: center top; pointer-events: none; user-select: none; }
+.canopy-back { z-index: 0; } .canopy-front { z-index: 2; }
 /* paint on a wall: a faint grain over everything */
 body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: url(grain.svg); opacity: .1; mix-blend-mode: multiply; }
 
 /* the formal sheet */
-.sheet-wrap { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-.sheet { position: relative; background: #fcf9f2; border: 1px solid rgba(74, 61, 99, .18); border-radius: 4px; }
+.sheet-wrap { position: relative; z-index: 1; isolation: isolate; max-width: 700px; margin: 0 auto; }
+.sheet { position: relative; }   /* no card: the words sit on the page itself */
+/* a clearing in the foliage behind the words: the page's own sky, feathered at the edges
+   (no border, no card), so the leaves recede behind the text and come back round it */
+.sheet::before { content: ""; position: absolute; inset: -30px -70px; z-index: -1; background: #ebeedb;
+  border-radius: 80px; filter: blur(28px); }
 main { max-width: none; margin: 0; padding: 52px 48px 24px; }
 footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
 @media (max-width: 560px) {
-  body { padding: 150px 34px 170px; }
+  body { padding: 230px 26px 170px; }
   main { padding: 34px 22px 18px; }
   footer { margin: 0 22px; }
   .back .c { width: 80vw; }
