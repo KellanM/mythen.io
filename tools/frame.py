@@ -21,7 +21,7 @@ OUT = os.environ.get('OUT') or os.path.join(os.path.dirname(__file__), '..')
 # (the old SVG filter: a displaced edge and a noise speckle, which read as JPEG noise). STIPPLE tunes the droplets.
 STYLE = os.environ.get('STYLE', 'kusama')   # Kellan's pick, 2026-10-28: every leaf filled with dots, after Kusama's pumpkin
 DROPS = dict(reach=18, density=0.5)
-KUSAMA = dict(k=0.8, gap=6, rmin=4)   # the medium, even gap (Kellan's pick) - 'kusama': rows of graded dots following each shape's outline (tools/stipple.py); KUSAMA env as k=v,k=v
+KUSAMA = dict(k=0.8, gap=4, rmin=4)   # the small, even gap (Kellan's pick) - 'kusama': rows of graded dots following each shape's outline (tools/stipple.py); KUSAMA env as k=v,k=v
 if os.environ.get('KUSAMA'): KUSAMA.update({k: float(v) for k, v in (kv.split('=') for kv in os.environ['KUSAMA'].split(','))})
 DOTS = {}   # 'dots': the whole shape as droplets (tools/stipple.py dots_only); DOTS env as k=v,k=v
 if os.environ.get('DOTS'): DOTS.update({k: float(v) for k, v in (kv.split('=') for kv in os.environ['DOTS'].split(','))})
