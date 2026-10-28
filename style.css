@@ -1,28 +1,24 @@
 /* Unsupervised Rock: the studio's site (studio/README.md). Calm, like Strata. */
 :root { --ink: #4a3d63; --ink-soft: rgba(74, 61, 99, .66); --line: rgba(74, 61, 99, .14);
   --font: "Avenir Next", "Avenir", Futura, "Century Gothic", "Segoe UI", system-ui, sans-serif; }
-/* A game-studio scene: a formal sheet in the middle of a flat, layered jungle. Solid
-   colour per layer, no gradients; each nearer layer darker. The layers repeat down the
-   page and drift at their own speeds (parallax.js); a thicker layer grows in as you
-   scroll, and the page ends on red-brown earth and ferns. The near layer just touches
-   the sheet's edges: the wild growing into the formal. */
-html { background: #e7f1d2; }
+/* A Paleolithic jungle round a formal sheet (Sendak's Wild Things forest, cave
+   pigments, coal-age plants; tools/paleo.py draws it): flat shapes, a solid colour per
+   depth, sprayed edges on the near plants. Far: a colonnade of thin trunks and tree-fern
+   crowns down both sides, drifting with the scroll (parallax.js). Top: lianas hanging from
+   the edge. Foot: a border of sword ferns, horsetails and cycads on stepped ochre earth,
+   behind the sheet's lower edge, with two clumps in front of its corners. */
+html { background: #ebeedb; }
 body { margin: 0; min-height: 100vh; position: relative; overflow: hidden; overflow: clip; color: var(--ink); font: 17px/1.6 var(--font);
-  padding: 80px 20px 290px; box-sizing: border-box; }
+  padding: 130px 20px 250px; box-sizing: border-box; }
 .jungle { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-.jungle.front { z-index: 2; }
 .layer { position: absolute; top: 0; bottom: 0; background-repeat: repeat-y; background-size: 100% auto; }
-.far { width: min(520px, 40vw); } .far.l { left: -60px; background-image: url(j-far-l.svg); } .far.r { right: -60px; background-image: url(j-far-r.svg); }
-.mid { width: min(440px, 32vw); } .mid.l { left: -50px; background-image: url(j-mid-l.svg); } .mid.r { right: -50px; background-image: url(j-mid-r.svg); }
-.thick { width: min(380px, 28vw); opacity: var(--grow, 0); } .thick.l { left: -30px; background-image: url(j-thick-l.svg); } .thick.r { right: -30px; background-image: url(j-thick-r.svg); }
-/* near: just over the sheet's edge, never over its words (the sheet has 48px of margin) */
-.near { width: 300px; } .near.l { left: calc(50% - 350px - 300px + 40px); background-image: url(j-near-l.svg); } .near.r { right: calc(50% - 350px - 300px + 40px); background-image: url(j-near-r.svg); }
-.ground { position: absolute; left: 0; right: 0; bottom: 0; height: 280px; z-index: 1;
-  background: url(ground.svg) center bottom 54px / auto 230px repeat-x, linear-gradient(#c98f6b, #c98f6b) center bottom / 100% 60px no-repeat; }
-.ground::before { content: ""; position: absolute; left: 0; right: 0; bottom: 56px; height: 120px; z-index: -1;
-  background: url(j-thick-l.svg) left bottom / auto 600px repeat-x; opacity: .9; }
+.far { width: min(460px, 34vw); } .far.l { left: -40px; background-image: url(far-l.svg); } .far.r { right: -40px; background-image: url(far-r.svg); }
+.canopy { position: absolute; left: 0; right: 0; top: 0; height: 560px; z-index: 0; pointer-events: none; background: url(canopy.svg) center top / auto 560px repeat-x; }
+.border { position: absolute; left: 0; right: 0; bottom: 0; height: 440px; z-index: 0; pointer-events: none; background: url(border.svg) center bottom / auto 440px repeat-x; }
+.front { position: absolute; z-index: 2; bottom: -150px; width: 300px; pointer-events: none; user-select: none; }
+.front.l { left: -190px; } .front.r { right: -190px; }
 /* paint on a wall: a faint grain over everything */
-body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: url(grain.svg); opacity: .12; mix-blend-mode: multiply; }
+body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: url(grain.svg); opacity: .1; mix-blend-mode: multiply; }
 
 /* the formal sheet */
 .sheet-wrap { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
@@ -30,13 +26,13 @@ body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-eve
 main { max-width: none; margin: 0; padding: 52px 48px 24px; }
 footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
 @media (max-width: 560px) {
-  body { padding: 110px 14px 250px; }
+  body { padding: 120px 14px 210px; }
   main { padding: 34px 22px 18px; }
   footer { margin: 0 22px; }
-  .far { width: 62vw; } .mid { width: 46vw; } .thick { width: 40vw; }
-  .jungle.front { z-index: 0; }   /* on a phone the near layer stays behind the sheet */
-  .near { width: 30vw; } .near.l { left: -8vw; } .near.r { right: -8vw; }
-  .ground { height: 230px; background-size: auto 190px, 100% 50px; background-position: center bottom 44px, center bottom; }
+  .far { width: 44vw; } .far.l { left: -18vw; } .far.r { right: -18vw; }
+  .canopy { height: 380px; background-size: auto 380px; }
+  .border { height: 330px; background-size: auto 330px; }
+  .front { width: 170px; bottom: -96px; } .front.l { left: -70px; } .front.r { right: -70px; }
 }
 a { color: var(--ink); }
 .studio { margin: 0; font-weight: 400; font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-soft); }
@@ -74,6 +70,10 @@ footer p { margin: .6em 0 0; letter-spacing: .06em; }
 main ul { list-style: none; padding-left: 0; }
 main ul li { position: relative; padding-left: 1.7em; }
 main ul li::before { content: ""; position: absolute; left: .1em; top: .42em; width: .9em; height: .9em;
-  background: url(bullet.svg) center / contain no-repeat; transform: rotate(-12deg); }
+  background: url(dab.svg) center / contain no-repeat; transform: rotate(-12deg); }
 main ul li:nth-child(2n)::before { transform: rotate(18deg) scale(.92); }
 main ul li:nth-child(3n)::before { transform: rotate(-30deg) scale(1.05); }
+
+/* the signature: a red-ochre hand, sprayed round as on a cave wall */
+.sign { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.sign img { width: 36px; height: auto; opacity: .9; }
