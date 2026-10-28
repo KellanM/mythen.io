@@ -83,3 +83,28 @@ main ul li::before { content: ""; position: absolute; left: .1em; top: .42em; wi
 main ul li:nth-child(2n)::before { transform: rotate(18deg) scale(.92); }
 main ul li:nth-child(3n)::before { transform: rotate(-30deg) scale(1.05); }
 
+
+/* the home page: only the studio, centred in the screen with room round it, and its game as one
+   tile (Simogo, Lucas Pope: a sentence about who, then the games themselves are the way in) */
+body.home { display: flex; flex-direction: column; min-height: 100vh; min-height: 100svh; padding: 0 24px; }
+.hello { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  position: relative; z-index: 1; max-width: 30em; margin: 0 auto; padding: max(22vh, 250px) 0 6vh; }   /* clear of the vine */
+.hello h1 { font-size: clamp(28px, 4.2vw, 40px); margin: 18px 0 18px; }
+.hello .lede { margin: 0; font-size: clamp(17px, 1.5vw, 19px); line-height: 1.7; color: var(--ink-soft); max-width: 26em; }
+.tile { display: flex; align-items: center; gap: 16px; margin-top: 64px; padding: 14px 22px 14px 14px; border-radius: 24px;
+  text-decoration: none; color: var(--ink); text-align: left; background: rgba(255, 252, 246, .7); box-shadow: inset 0 0 0 1px var(--line);
+  transition: transform .2s ease, background .2s ease; }
+.tile:hover, .tile:focus-visible { transform: translateY(-2px); background: rgba(255, 252, 246, .95); }
+.tile img { width: 72px; height: 72px; border-radius: 17px; flex: none; }
+.tile b { display: block; font-weight: 500; font-size: 18px; }
+.tile small { display: block; margin-top: 2px; font-size: 14px; color: var(--ink-soft); }
+.tile .go { margin-left: 6px; font-size: 20px; color: var(--ink-soft); transition: transform .2s ease; }
+.tile:hover .go { transform: translateX(3px); }
+.hello-foot { position: relative; z-index: 5;   /* the home page doesn't scroll, so its footer sits in front of the plants */
+  width: 100%; max-width: 560px; margin: 0 auto 36px; box-sizing: border-box; }
+@media (max-width: 560px) { body.home { padding: 0 26px; } .hello { padding: 140px 0 22px; } .hello h1 { margin: 12px 0 14px; }
+  .tile { margin-top: 40px; gap: 14px; padding-right: 18px; } .tile img { width: 60px; height: 60px; border-radius: 14px; } .tile b { font-size: 16px; } .tile .go { display: none; }
+  .hello-foot { margin-bottom: 24px; } }
+/* the game's own page */
+.game.lead { margin-top: 18px; }
+.game.lead h1 { margin: 0; font-size: 22px; letter-spacing: .02em; font-weight: 500; }
