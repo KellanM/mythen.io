@@ -1,17 +1,18 @@
 /* Unsupervised Rock: the studio's site (studio/README.md). Calm, like Strata. */
 :root { --ink: #4a3d63; --ink-soft: rgba(74, 61, 99, .66); --line: rgba(74, 61, 99, .14);
   --font: "Avenir Next", "Avenir", Futura, "Century Gothic", "Segoe UI", system-ui, sans-serif; }
-/* A Paleolithic jungle as a frame round the words: a few huge, simple shapes (Matisse's
-   cut-outs, Primal's silhouettes) growing in from the screen's corners, weighted on the
-   diagonal; tools/frame.py draws them. They stay still, in front, and the words scroll
-   behind them (Kellan, 2026-10-28). Flat colour, sprayed edges. */
+/* A Paleolithic jungle as a frame round a formal sheet: a few huge, simple shapes
+   (Matisse's cut-outs, Primal's silhouettes) growing in from the screen's four corners,
+   like a proscenium; tools/frame.py draws them. Two depths: the back behind the sheet,
+   the front over its edges, each drifting a little as the page scrolls (parallax.js
+   sets --p, 0 at the top to 1 at the bottom). Flat colour, sprayed edges. */
 html { background: #ebeedb; overflow-x: hidden; overscroll-behavior-x: none; }   /* no sideways drift on a phone; only x, so the page still scrolls */
 body { touch-action: pan-y pinch-zoom; }
 body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font: 17px/1.6 var(--font);
   padding: clamp(250px, 30vmax, 400px) 20px 160px; box-sizing: border-box; }
 .frame { position: fixed; inset: 0; pointer-events: none; }
-.frame.back { z-index: 2; }   /* the bordering plants stay still, in front: the words scroll behind them */
-.frame.front { z-index: 3; }
+.frame.back { z-index: 0; transform: translateY(calc(var(--p, 0) * -28px)); }
+.frame.front { z-index: 2; transform: translateY(calc(var(--p, 0) * -64px)); }
 .c { position: absolute; height: auto; user-select: none; }
 .back .c { width: clamp(280px, 40vw, 900px); }  .back .c.bl { width: clamp(240px, 31vw, 680px); }
 .front .c { width: clamp(220px, 30vw, 680px); } .front .c.bl { width: clamp(170px, 21vw, 480px); }
@@ -23,19 +24,25 @@ body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font
 .canopy-back, .canopy-front { position: absolute; top: 0; left: 0; width: 100%; height: clamp(240px, 30vmax, 420px); object-fit: cover; object-position: center top; pointer-events: none; user-select: none; }
 .canopy-back { z-index: 0; } .canopy-front { z-index: 2; }
 /* paint on a wall: a faint grain over everything */
-body::after { content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none; background: url(grain.svg); opacity: .1; mix-blend-mode: multiply; }
+body::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: url(grain.svg); opacity: .1; mix-blend-mode: multiply; }
 
 /* the formal sheet */
 .sheet-wrap { position: relative; z-index: 1; isolation: isolate; max-width: 700px; margin: 0 auto; }
 .sheet { position: relative; }   /* no card: the words sit on the page itself */
+/* a clearing in the foliage behind the words: the page's own sky, feathered at the edges
+   (no border, no card), so the leaves recede behind the text and come back round it */
+.sheet::before { content: ""; position: absolute; z-index: -1; background: #ebeedb; border-radius: 48px; filter: blur(14px);
+  /* never wider than the room beside the text, so it can't push the page past the screen's edge */
+  inset: -24px calc(-1 * min(40px, max(14px, (100vw - 700px) / 2 - 6px))); }
 main { max-width: none; margin: 0; padding: 52px 48px 24px; }
 footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
 @media (max-width: 560px) {
   body { padding: 230px 26px 170px; }
   main { padding: 34px 22px 18px; }
   footer { margin: 0 22px; }
-  .back .c { width: 62vw; }  .back .c.bl { width: 46vw; }   /* on a phone the corners keep to the corners */
-  .front .c { width: 42vw; } .front .c.bl { width: 30vw; }
+  .back .c { width: 78vw; }  .back .c.bl { width: 60vw; }
+  .front .c { width: 54vw; } .front .c.bl { width: 40vw; }
+  .frame.front { z-index: 0; }   /* on a phone the front fronds stay behind the sheet, off the words */
 }
 a { color: var(--ink); }
 .studio { margin: 0; font-weight: 400; font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-soft); }
