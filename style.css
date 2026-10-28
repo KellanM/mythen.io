@@ -6,15 +6,16 @@
    like a proscenium; tools/frame.py draws them. Two depths: the back behind the sheet,
    the front over its edges, each drifting a little as the page scrolls (parallax.js
    sets --p, 0 at the top to 1 at the bottom). Flat colour, sprayed edges. */
-html { background: #ebeedb; }
+html { background: #ebeedb; overflow-x: hidden; overscroll-behavior-x: none; }   /* no sideways drift on a phone; only x, so the page still scrolls */
+body { touch-action: pan-y pinch-zoom; }
 body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font: 17px/1.6 var(--font);
   padding: clamp(250px, 30vmax, 400px) 20px 160px; box-sizing: border-box; }
 .frame { position: fixed; inset: 0; pointer-events: none; }
 .frame.back { z-index: 0; transform: translateY(calc(var(--p, 0) * -28px)); }
 .frame.front { z-index: 2; transform: translateY(calc(var(--p, 0) * -64px)); }
 .c { position: absolute; height: auto; user-select: none; }
-.back .c { width: clamp(280px, 40vw, 900px); }  .back .c.tr, .back .c.bl { width: clamp(200px, 25vw, 560px); }
-.front .c { width: clamp(220px, 30vw, 680px); } .front .c.tr, .front .c.bl { width: clamp(150px, 17vw, 400px); }
+.back .c { width: clamp(280px, 40vw, 900px); }  .back .c.bl { width: clamp(240px, 31vw, 680px); }
+.front .c { width: clamp(220px, 30vw, 680px); } .front .c.bl { width: clamp(170px, 21vw, 480px); }
 .c.tl { top: 0; left: 0; } .c.tr { top: 0; right: 0; transform: scaleX(-1); }
 .c.bl { bottom: 0; left: 0; } .c.br { bottom: 0; right: 0; transform: scaleX(-1); }
 .front .c.tl, .front .c.tr { top: -2vmax; } .front .c.bl, .front .c.br { bottom: -6vmax; }
@@ -39,8 +40,8 @@ footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
   body { padding: 230px 26px 170px; }
   main { padding: 34px 22px 18px; }
   footer { margin: 0 22px; }
-  .back .c { width: 78vw; }  .back .c.tr, .back .c.bl { width: 50vw; }
-  .front .c { width: 54vw; } .front .c.tr, .front .c.bl { width: 34vw; }
+  .back .c { width: 78vw; }  .back .c.bl { width: 60vw; }
+  .front .c { width: 54vw; } .front .c.bl { width: 40vw; }
   .frame.front { z-index: 0; }   /* on a phone the front fronds stay behind the sheet, off the words */
 }
 a { color: var(--ink); }

@@ -54,10 +54,10 @@ mound = ''.join(f'<path d="M-10,{S+10} Q{120+i*40},{S-150+i*45} {420-i*50},{S+10
 # four different corners, weighted on the diagonal (Kellan, 2026-10-28: asymmetry, the
 # rule of thirds): heavy top-left and bottom-right, light top-right and bottom-left. The
 # right-hand corners are drawn as left ones and mirrored by the page, but each is its own.
-save('corner-tl-back', BACK, top(3, 6, 680, 96, [(430, 500)]), 'b', 2, 6)
-save('corner-tl-front', FRONT, top(7, 3, 500, 82, [(250, 340)]), 'f', 7, 7)
+save('corner-tl-back', BACK, top(3, 6, 680, 96, []), 'b', 2, 6)
+save('corner-tl-front', FRONT, top(7, 3, 500, 82, []), 'f', 7, 7)
 save('corner-tr-back', BACK, top(13, 3, 520, 84, []), 'b', 2, 6)
-save('corner-tr-front', FRONT, top(17, 2, 380, 70, [(160, 230)]), 'f', 7, 7)
+save('corner-tr-front', FRONT, top(17, 2, 380, 70, []), 'f', 7, 7)
 save('corner-bl-back', BACK, bottom(15, 3, 500, 84, [(330, 90, -1.1)]), 'b', 2, 6)
 save('corner-bl-front', FRONT, bottom(19, 2, 360, 70, []), 'f', 7, 7, under=mound)
 save('corner-br-back', BACK, bottom(5, 6, 660, 96, [(470, 120, -1.2), (560, 96, -0.7)]), 'b', 2, 6)
@@ -85,8 +85,10 @@ def layer_svg(name, groups, halo, rough):
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {TW} {TH}" width="{TW}" height="{TH}" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><defs>{defs}</defs>{body}</svg>')
 
 random.seed(41); fringe = []
-for x in range(150, TW - 100, 120):                              # big leaves hanging along the top edge
-    for k in range(random.randint(1, 3)):
+for x in range(60, TW - 100, 110):                               # big leaves along the top edge, thick on the left
+    w = max(0.0, 1 - x / (TW * 0.72))                            # 1 at the left, nothing past ~70% across
+    if random.random() > w * 1.25: continue
+    for k in range(1 + int(w * 3)):
         fringe.append(heart((x + random.uniform(-40, 40), random.uniform(-30, 10)), math.pi/2 + random.uniform(-0.7, 0.7), random.uniform(70, 110)))
 VINE_A, VINE_B = '#9a5530', '#9db45a'                             # red-ochre brown; a light, sunlit olive
 layer_svg('top-back', [(BACK, fringe)], 2, 6)   # the red-ochre vine is gone (Kellan, 2026-10-28)
