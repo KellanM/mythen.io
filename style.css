@@ -6,7 +6,7 @@
    ochre rock mounds and small plants at the foot, the vine swinging across the top;
    tools/frame.py draws them. The border holds still and in front, and the words scroll
    behind it (Kellan, 2026-10-28). Flat colour, sprayed edges. */
-html { background: #ebeedb; overflow-x: hidden; overscroll-behavior-x: none; }   /* no sideways drift on a phone; only x, so the page still scrolls */
+html { background: #ebeedb; overscroll-behavior-x: none; }   /* no overflow here: iOS 26 Safari clips fixed layers to the screen between its bars when the root clips */
 body { touch-action: pan-y pinch-zoom; }
 body { margin: 0; min-height: 100vh; position: relative; color: var(--ink); font: 17px/1.6 var(--font);
   padding: clamp(190px, 22vmax, 320px) 20px 220px; box-sizing: border-box; }
@@ -43,7 +43,7 @@ footer { max-width: none; margin: 0 48px; padding: 20px 0 30px; }
   .front .c { width: 48vw; } .front .c.bl { width: 36vw; }
   .frame.front { z-index: 0; }   /* on a phone the front fronds stay behind the sheet, off the words */
 }
-a { color: var(--ink); }
+a { color: var(--ink); overflow-wrap: anywhere; }   /* a long link breaks rather than widening the page */
 .studio { margin: 0; font-weight: 400; font-size: 13px; letter-spacing: .32em; text-transform: uppercase; color: var(--ink-soft); }
 .studio a { color: inherit; text-decoration: none; }
 h1 { margin: 10px 0 0; font-weight: 400; font-size: 26px; letter-spacing: .02em; }
