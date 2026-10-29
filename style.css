@@ -69,6 +69,9 @@ footer { border-top: 1px solid var(--line); text-align: center; font-size: 13px;
 
 footer a { color: var(--ink-soft); text-decoration: none; margin: 0 .5em; text-transform: uppercase; }
 footer p { margin: .6em 0 0; letter-spacing: .06em; }
+/* the studio's mark, the sticker from Strata's splash card; a soft shadow so its white edge shows on the paper */
+footer .studio-mark { display: block; width: 84px; margin: 0 auto 14px; }
+footer .studio-mark img { display: block; width: 100%; height: auto; filter: drop-shadow(0 1px 1.5px rgba(40, 45, 30, .28)) drop-shadow(0 3px 8px rgba(40, 45, 30, .12)); }
 
 /* the feature section */
 
